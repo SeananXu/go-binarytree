@@ -23,7 +23,10 @@ SOFTWARE.
 // which are referred to as the left child and the right child.
 package binarytree
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // CompareFunc compares between a and b.
 // if a > b, returns 1
@@ -46,6 +49,10 @@ func (a *KV) CompareTo(b *KV) int {
 		return 1
 	}
 	return strings.Compare(a.Key, b.Key)
+}
+
+func (a *KV) String() string {
+	return fmt.Sprintf("k: %s, v: %v", a.Key, a.Value)
 }
 
 var (

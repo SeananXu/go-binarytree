@@ -40,6 +40,8 @@ type Node interface {
 	Right() Node
 	// Value returns the value of current node.
 	Value() interface{}
+	// Search returns the value in the node
+	Search(v interface{}, f CompareFunc) (interface{}, bool)
 }
 
 // BSNode is node of binary tree.
@@ -140,6 +142,20 @@ func (n *BSNode) Value() interface{} {
 	return n.value
 }
 
+// Search returns the value in the node
+func (n *BSNode) Search(v interface{}, f CompareFunc) (interface{}, bool) {
+	if n == nil {
+		return nil, false
+	}
+	if c := f(n.value, v); c > 0 {
+		return n.left.Search(v, f)
+	} else if c < 0 {
+		return n.right.Search(v, f)
+	} else {
+		return n.value, true
+	}
+}
+
 type AVLNode struct {
 	value interface{}
 	left  *AVLNode
@@ -237,6 +253,20 @@ func (n *AVLNode) Value() interface{} {
 		return nil
 	}
 	return n.value
+}
+
+// Search returns the value in the node
+func (n *AVLNode) Search(v interface{}, f CompareFunc) (interface{}, bool) {
+	if n == nil {
+		return nil, false
+	}
+	if c := f(n.value, v); c > 0 {
+		return n.left.Search(v, f)
+	} else if c < 0 {
+		return n.right.Search(v, f)
+	} else {
+		return n.value, true
+	}
 }
 
 // balance checks and balance the node.

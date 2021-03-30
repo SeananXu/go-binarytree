@@ -54,6 +54,11 @@ func (t *Tree) Max() interface{} {
 	return t.root.Max()
 }
 
+// Search returns the value in the tree
+func (t *Tree) Search(v interface{}) (interface{}, bool) {
+	return t.root.Search(v, t.compareFunc)
+}
+
 // interval returns string of tree.
 func (t *Tree) String() string {
 	builder := &strings.Builder{}
