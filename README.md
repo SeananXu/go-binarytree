@@ -13,13 +13,13 @@ Import it with:
 ```go
 import "github.com/SeananXu/go-binarytree"
 ```
-and use set as the package name inside the code.
+and use `binarytree` as the package name inside the code.
 
 ## Example
 #### Initialization
 ```go
 // Binary Search Tree
-t :=binarytree.NewBSTree(binarytree.IntCompareFunc)
+t := binarytree.NewBSTree(binarytree.IntCompareFunc)
 
 // Adelson-Velsky and Landis Tree
 t := binarytree.NewAVLTree(binarytree.IntCompareFunc)
@@ -44,7 +44,7 @@ str := t.String()
 
 ...
 ```
-
+more BST cases click [here](./examples/bst/main.go), AVLT cases click [here](./examples/avlt/main.go)
 ## License
 
 The MIT License (MIT) - see [LICENSE](LICENSE) for more details

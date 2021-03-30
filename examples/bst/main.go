@@ -1,8 +1,9 @@
 package main
 
 import (
-	"binarytree"
 	"fmt"
+
+	"binarytree"
 )
 
 func main() {
