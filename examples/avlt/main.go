@@ -23,6 +23,8 @@ func main() {
 	fmt.Printf("search 7: %d, %v\n", result, ok)
 	fmt.Println("-------------------------------")
 	tr.Remove(6)
+	fmt.Printf("size: %d\n", tr.Size())
+	fmt.Println("-------------------------------")
 	fmt.Println(tr.String())
 
 	fmt.Printf("-------------------------------\n------------kv\n-------------------------------\n")
@@ -42,5 +44,7 @@ func main() {
 	fmt.Printf("search c: %v, %v\n", result, ok)
 	fmt.Println("-------------------------------")
 	tr.Remove(&binarytree.KV{Key: "e"})
+	fmt.Printf("size: %d\n", tr.Size())
+	fmt.Println("-------------------------------")
 	fmt.Println(tr.String())
 }

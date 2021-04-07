@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
-
 	"binarytree"
+	"fmt"
 )
 
 func main() {
@@ -29,7 +28,7 @@ func main() {
 	fmt.Println(tr.String())
 
 	fmt.Printf("-------------------------------\n------------kv\n-------------------------------\n")
-	tr = binarytree.NewBSTree(binarytree.KVCompareFunc)
+	tr = binarytree.NewRBTree(binarytree.KVCompareFunc)
 	tr.Add(&binarytree.KV{Key: "a", Value: "a"})
 	tr.Add(&binarytree.KV{Key: "b", Value: "b"})
 	tr.Add(&binarytree.KV{Key: "c", Value: "c"})
@@ -48,5 +47,4 @@ func main() {
 	fmt.Printf("size: %d\n", tr.Size())
 	fmt.Println("-------------------------------")
 	fmt.Println(tr.String())
-
 }
