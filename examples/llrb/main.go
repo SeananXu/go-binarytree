@@ -7,7 +7,7 @@ import (
 
 func main() {
 	fmt.Printf("-------------------------------\n------------int\n-------------------------------\n")
-	tr := binarytree.NewRBTree(binarytree.IntCompareFunc)
+	tr := binarytree.NewLLRBTree(binarytree.IntCompareFunc)
 	tr.Add(8)
 	tr.Add(5)
 	tr.Add(10)
@@ -28,7 +28,7 @@ func main() {
 	fmt.Println(tr.String())
 
 	fmt.Printf("-------------------------------\n------------kv\n-------------------------------\n")
-	tr = binarytree.NewRBTree(binarytree.KVCompareFunc)
+	tr = binarytree.NewLLRBTree(binarytree.KVCompareFunc)
 	tr.Add(&binarytree.KV{Key: "a", Value: "a"})
 	tr.Add(&binarytree.KV{Key: "b", Value: "b"})
 	tr.Add(&binarytree.KV{Key: "c", Value: "c"})

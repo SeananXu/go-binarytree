@@ -112,5 +112,9 @@ func NewAVLTree(f CompareFunc) *Tree {
 }
 
 func NewRBTree(f CompareFunc) *Tree {
+	return &Tree{root: (*RBNode)(nil), compareFunc: f}
+}
+
+func NewLLRBTree(f CompareFunc) *Tree {
 	return &Tree{root: (*LLRBNode)(nil), compareFunc: f}
 }

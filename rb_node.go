@@ -23,6 +23,8 @@ SOFTWARE.
 // which are referred to as the left child and the right child.
 package binarytree
 
+import "fmt"
+
 // RBNode is the node of red–black tree
 type RBNode struct {
 	color  Color
@@ -33,9 +35,11 @@ type RBNode struct {
 }
 
 func (n *RBNode) Add(v interface{}, f CompareFunc) (Node, Action) {
+	if n == nil {
+		return &RBNode{color: Black, value: v}, AddedAction
+	}
 	o, a := n.add(v, f)
-	o.balance()
-	return n, a
+	return o.balance(n), a
 }
 
 func (n *RBNode) isLeft() bool {
@@ -60,71 +64,72 @@ func (n *RBNode) pug() (parent *RBNode, uncle *RBNode, grandparent *RBNode) {
 	return
 }
 
-func (n *RBNode) add(v interface{}, f CompareFunc) (*RBNode, Action) {
-	if n == nil {
-		return &RBNode{value: v, color: Red}, AddedAction
-	}
-	var a Action
-	if c := f(n.value, v); c > 0 {
-		n.left, a = n.left.add(v, f)
-		return n.left, a
-	} else if c < 0 {
-		n.right, a = n.right.add(v, f)
-		return n.right, a
-	} else {
-		n.value = v
-		// update value, so here is false
-		a = UpdatedAction
-		return n, a
+func (n *RBNode) add(v interface{}, f CompareFunc) (o *RBNode, a Action) {
+	for node := n; ; {
+		if c := f(node.value, v); c > 0 {
+			if node.left == nil {
+				node.left = &RBNode{color: Red, value: v, parent: node}
+				return node.left, AddedAction
+			}
+			node = node.left
+		} else if c < 0 {
+			if node.right == nil {
+				node.right = &RBNode{color: Red, value: v, parent: node}
+				return node.right, AddedAction
+			}
+			node = node.right
+		} else {
+			node.value = v
+			return node, UpdatedAction
+		}
 	}
 }
 
-func (n *RBNode) balance() {
+func (n *RBNode) balance(root *RBNode) *RBNode {
 	parent, uncle, grandparent := n.pug()
 	// CASE1: the current node is root.
 	if parent == nil {
 		n.color = Black
-		return
+		return n
 	}
 	// CASE2: The color of parent node is black.
 	if n.parent.color == Black {
-		return
+		return nil
 	}
 	// CASE3: The color of parent and uncle are red.
 	if uncle != nil && uncle.color == Red {
 		parent.color = Black
 		uncle.color = Black
 		grandparent.color = Red
-		grandparent.balance()
-		return
+		return grandparent.balance(root)
 	}
 	// CASE4: The color of parent is red, but uncle is black
 	if parent.isLeft() {
 		if !n.isLeft() {
-			parent.rotateLeft()
+			root = parent.rotateLeft(root)
 			parent, uncle, grandparent = parent.pug()
 		}
 		parent.color = Black
 		grandparent.color = Red
-		grandparent.rotateRight()
+		return grandparent.rotateRight(root)
 	} else {
 		if n.isLeft() {
-			parent.rotateRight()
+			root = parent.rotateRight(root)
 			parent, uncle, grandparent = parent.pug()
 		}
 		parent.color = Black
 		grandparent.color = Red
-		grandparent.rotateLeft()
+		return grandparent.rotateLeft(root)
 	}
 }
 
 // rotateRight rotates right node.
-func (n *RBNode) rotateRight() *RBNode {
+func (n *RBNode) rotateRight(root *RBNode) *RBNode {
 	o := n.left
-	n.left = o.right
 	if o.right != nil {
 		o.right.parent = n
 	}
+	n.left = o.right
 	p := n.parent
 	if p != nil {
 		if p.isLeft() {
@@ -132,15 +137,17 @@ func (n *RBNode) rotateRight() *RBNode {
 		} else {
 			p.right = o
 		}
+	} else {
+		root = o
 	}
 	o.parent = p
 	n.parent = o
 	o.right = n
-	return o
+	return root
 }
 
 // rotateRight rotates left node.
-func (n *RBNode) rotateLeft() *RBNode {
+func (n *RBNode) rotateLeft(root *RBNode) *RBNode {
 	o := n.right
 	n.right = o.left
 	if o.left != nil {
@@ -153,11 +160,17 @@ func (n *RBNode) rotateLeft() *RBNode {
 		} else {
 			p.right = o
 		}
+	} else {
+		root = o
 	}
 	o.parent = p
 	n.parent = o
 	o.left = n
-	return o
+	return root
+}
+
+func (n *RBNode) String() string {
+	return fmt.Sprintf("value: %v, color: %s, parent: %v", n.value, n.color, n.parent.Value())
 }
 
 func (n *RBNode) Remove(v interface{}, f CompareFunc) (Node, Action) {
@@ -173,15 +186,27 @@ func (n *RBNode) Max() interface{} {
 }
 
 func (n *RBNode) Left() Node {
-	panic("implement me")
+	return n.left.self()
 }
 
 func (n *RBNode) Right() Node {
-	panic("implement me")
+	return n.right.self()
+}
+
+// self returns the current node.
+func (n *RBNode) self() Node {
+	// Avoids n is nil, but got node is not nil.
+	if n == nil {
+		return nil
+	}
+	return n
 }
 
 func (n *RBNode) Value() interface{} {
-	panic("implement me")
+	if n == nil {
+		return nil
+	}
+	return n.value
 }
 
 func (n *RBNode) Search(v interface{}, f CompareFunc) (interface{}, bool) {

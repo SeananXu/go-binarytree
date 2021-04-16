@@ -42,6 +42,8 @@ type Node interface {
 	Value() interface{}
 	// Search returns the value in the node
 	Search(v interface{}, f CompareFunc) (interface{}, bool)
+	// String returns the string of node
+	String() string
 }
 
 // Action returns the type of node operation.
